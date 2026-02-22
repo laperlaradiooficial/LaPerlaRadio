@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>La Perla Radio | El Sonido de la Calle</title>
+    
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Teko:wght@300;400;500;600;700&family=Inter:wght@300;400;600;800&display=swap');
+      
+      body {
+        font-family: 'Inter', sans-serif;
+        background-color: #09090b; /* zinc-950 */
+        color: #e4e4e7; /* zinc-200 */
+      }
+      
+      h1, h2, h3, h4, h5, h6, .display-font {
+        font-family: 'Teko', sans-serif;
+      }
+
+      /* Custom scrollbar for chat */
+      .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+      }
+      .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+      }
+
+      /* Radio Glitch Effect */
+      .radio-glitch {
+        position: relative;
+      }
+      
+      .radio-glitch::before,
+      .radio-glitch::after {
+        content: attr(data-text);
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: transparent;
+      }
+      
+      .radio-glitch::before {
+        left: 2px;
+        text-shadow: -2px 0 #ef4444; /* urban-red */
+        clip-path: inset(0 0 0 0);
+        animation: glitch-anim-1 3s infinite linear alternate-reverse;
+      }
+      
+      .radio-glitch::after {
+        left: -2px;
+        text-shadow: 2px 0 #fbbf24; /* urban-gold */
+        clip-path: inset(0 0 0 0);
+        animation: glitch-anim-2 2s infinite linear alternate-reverse;
+      }
+      
+      @keyframes glitch-anim-1 {
+        0% { clip-path: inset(20% 0 80% 0); transform: translate(-2px, 1px); }
+        20% { clip-path: inset(60% 0 10% 0); transform: translate(2px, -1px); }
+        40% { clip-path: inset(40% 0 50% 0); transform: translate(-2px, 2px); }
+        60% { clip-path: inset(80% 0 5% 0); transform: translate(2px, -2px); }
+        80% { clip-path: inset(10% 0 70% 0); transform: translate(-1px, 1px); }
+        100% { clip-path: inset(30% 0 20% 0); transform: translate(1px, -1px); }
+      }
+      
+      @keyframes glitch-anim-2 {
+        0% { clip-path: inset(10% 0 50% 0); transform: translate(2px, -1px); }
+        20% { clip-path: inset(30% 0 20% 0); transform: translate(-2px, 1px); }
+        40% { clip-path: inset(70% 0 10% 0); transform: translate(1px, -2px); }
+        60% { clip-path: inset(20% 0 40% 0); transform: translate(-1px, 2px); }
+        80% { clip-path: inset(50% 0 30% 0); transform: translate(2px, 1px); }
+        100% { clip-path: inset(0% 0 90% 0); transform: translate(-2px, -1px); }
+      }
+    </style>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'urban-black': '#050505',
+              'urban-gold': '#fbbf24',
+              'urban-red': '#ef4444',
+              'urban-dark': '#18181b',
+            },
+            animation: {
+              'pulse-fast': 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+              'equalizer': 'equalizer 1s ease-in-out infinite',
+              'flag-flap': 'flap 2.5s ease-in-out infinite',
+              'flag-shine': 'shine 2s linear infinite',
+            },
+            keyframes: {
+              equalizer: {
+                '0%, 100%': { height: '20%' },
+                '50%': { height: '100%' },
+              },
+              flap: {
+                '0%, 100%': { transform: 'perspective(400px) rotateY(0deg) skewY(0deg)' },
+                '25%': { transform: 'perspective(400px) rotateY(15deg) skewY(2deg)' },
+                '50%': { transform: 'perspective(400px) rotateY(0deg) skewY(0deg)' },
+                '75%': { transform: 'perspective(400px) rotateY(-15deg) skewY(-2deg)' },
+              },
+              shine: {
+                 '0%': { transform: 'translateX(-150%) skewX(-15deg)' },
+                 '100%': { transform: 'translateX(150%) skewX(-15deg)' }
+              }
+            }
+          }
+        }
+      }
+    </script>
+  <script type="importmap">
+{
+  "imports": {
+    "lucide-react": "https://esm.sh/lucide-react@^0.561.0",
+    "@google/genai": "https://esm.sh/@google/genai@^1.33.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "firebase/": "https://esm.sh/firebase@^12.7.0/"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
