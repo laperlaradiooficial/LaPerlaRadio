@@ -245,7 +245,7 @@ export const Player: React.FC<PlayerProps> = ({
            <input type="range" min={0} max={duration || 100} value={currentTime} onChange={handleSeek} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" step="0.1" />
         </div>
 
-        <div className="container mx-auto px-4 h-20 flex items-center justify-between">
+        <div className="container mx-auto px-4 h-20 flex items-center justify-between mt-2">
           
           {/* TRACK INFO LEFT */}
           <div className="flex items-center gap-3 md:gap-4 w-[50%] md:w-1/3 min-w-0 pr-2 group/player-info">

@@ -67,7 +67,7 @@ export const Header: React.FC = () => {
 
         <div className="flex items-center gap-4">
           <a 
-            href="mailto:prodnicoruiz@gmail.com?subject=Demo%20para%20La%20Perla%20Radio"
+            href="mailto:laperlaradiooficial@gmail.com?subject=Demo%20para%20La%20Perla%20Radio"
             className="hidden md:flex items-center gap-2 bg-zinc-100 text-black px-4 py-2 text-xs font-bold uppercase tracking-widest hover:bg-urban-gold transition-colors rounded-sm"
           >
             <Mic2 size={14} /> Enviar Demo

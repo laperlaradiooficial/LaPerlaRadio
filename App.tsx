@@ -181,7 +181,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-urban-black text-zinc-200 selection:bg-urban-gold selection:text-black">
+    <div className="min-h-screen bg-urban-black text-zinc-200 text-lg selection:bg-urban-gold selection:text-black">
       <Header />
       
       {/* Toast Notification */}
@@ -263,6 +263,45 @@ const App: React.FC = () => {
             </div>
           </div>
         </div>
+
+        {/* APOYA Section */}
+        <section id="apoya" className="py-12 bg-zinc-900 border-t border-zinc-800">
+          <div className="container mx-auto px-4 md:px-8">
+            <div className="text-center mb-6">
+              <h3 className="text-3xl font-bold text-urban-gold display-font">APOYA</h3>
+            </div>
+
+            <div className="flex items-center justify-center gap-12 flex-wrap">
+              <div className="flex flex-col items-center gap-3">
+                <a href="https://www.instagram.com/adorartepereira/" target="_blank" rel="noopener noreferrer" aria-label="Adorarte Instagram" className="transform transition-transform duration-300 hover:scale-105 hover:-translate-y-1">
+                  <img src="https://i.imgur.com/8I1glAC.png" alt="Adorarte" className="h-32 md:h-40 lg:h-48 object-contain" />
+                </a>
+                <span className="text-base text-zinc-200">Adorarte</span>
+              </div>
+
+              <div className="flex flex-col items-center gap-3">
+                <a href="https://www.instagram.com/bymanuelataborda/" target="_blank" rel="noopener noreferrer" aria-label="By Manuela Taborda Instagram" className="transform transition-transform duration-300 hover:scale-105 hover:-translate-y-1">
+                  <img src="https://i.imgur.com/ppkJHjR.png" alt="By: Manuela Taborda Terapias Capilares" className="h-32 md:h-40 lg:h-48 object-contain" />
+                </a>
+                <span className="text-base text-zinc-200">By: Manuela Taborda</span>
+              </div>
+
+              <div className="flex flex-col items-center gap-3">
+                <a href="https://www.instagram.com/ar.recordsco/" target="_blank" rel="noopener noreferrer" aria-label="Ar Records Instagram" className="transform transition-transform duration-300 hover:scale-105 hover:-translate-y-1">
+                  <img src="https://i.imgur.com/y8pQaYL.png" alt="Ar Records" className="h-32 md:h-40 lg:h-48 object-contain" />
+                </a>
+                <span className="text-base text-zinc-200">Ar Records</span>
+              </div>
+
+              <div className="flex flex-col items-center gap-3">
+                <a href="https://www.instagram.com/zerhu_/" target="_blank" rel="noopener noreferrer" aria-label="ZERHU Instagram" className="transform transition-transform duration-300 hover:scale-105 hover:-translate-y-1">
+                  <img src="https://i.imgur.com/Lvwimb6.png" alt="ZERHU" className="h-32 md:h-40 lg:h-48 object-contain" />
+                </a>
+                <span className="text-base text-zinc-200">ZERHU</span>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
 
       <Player 

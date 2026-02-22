@@ -257,16 +257,18 @@ export const ReleasesSection: React.FC<ReleasesSectionProps> = ({
             {/* CAROUSEL NAVIGATION */}
             {isCarouselMode && (
               <>
-                <button 
+                <button
                   onClick={() => scroll('left')}
-                  className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-50 w-12 h-12 bg-urban-gold text-black rounded-full flex items-center justify-center shadow-xl opacity-0 group-hover/carousel:opacity-100 group-hover/carousel:translate-x-0 transition-all hover:scale-110 active:scale-95 hidden lg:flex"
+                  className="absolute left-4 top-[42%] -translate-y-1/2 z-50 w-12 h-12 bg-urban-gold text-black rounded-full flex items-center justify-center shadow-xl opacity-0 group-hover/carousel:opacity-100 transition-all hover:scale-110 hover:shadow-[0_0_30px_rgba(255,215,0,0.18)] hover:drop-shadow-[0_0_30px_rgba(255,215,0,0.12)] active:scale-95 hidden lg:flex"
                 >
+                  <span className="absolute inset-0 rounded-full bg-urban-gold/10 blur-[6px] opacity-0 group-hover/carousel:opacity-100 transition-opacity"></span>
                   <ChevronLeft size={24} strokeWidth={3} />
                 </button>
-                <button 
+                <button
                   onClick={() => scroll('right')}
-                  className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-50 w-12 h-12 bg-urban-gold text-black rounded-full flex items-center justify-center shadow-xl opacity-0 group-hover/carousel:opacity-100 group-hover/carousel:translate-x-0 transition-all hover:scale-110 active:scale-95 hidden lg:flex"
+                  className="absolute right-4 top-[42%] -translate-y-1/2 z-50 w-12 h-12 bg-urban-gold text-black rounded-full flex items-center justify-center shadow-xl opacity-0 group-hover/carousel:opacity-100 transition-all hover:scale-110 hover:shadow-[0_0_30px_rgba(255,215,0,0.18)] hover:drop-shadow-[0_0_30px_rgba(255,215,0,0.12)] active:scale-95 hidden lg:flex"
                 >
+                  <span className="absolute inset-0 rounded-full bg-urban-gold/10 blur-[6px] opacity-0 group-hover/carousel:opacity-100 transition-opacity"></span>
                   <ChevronRight size={24} strokeWidth={3} />
                 </button>
               </>
