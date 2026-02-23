@@ -199,7 +199,7 @@ export const PLAYLIST_DATA: Song[] = [
   {
     id: '17',
     title: 'Caliente',
-    artist: 'Lebron DelGuetto x Bakzord x Lia',
+    artist: 'Lebron DelGhetto x Bakzord x Lia',
     coverUrl: 'https://res.cloudinary.com/dlljikxgk/image/upload/v1765927646/Caliente_puzx1w.jpg',
     audioUrl: 'https://res.cloudinary.com/dlljikxgk/video/upload/v1765927658/Caliente_cvzh2i.mp3',
     releaseDate: 'Hit'
@@ -215,7 +215,7 @@ export const PLAYLIST_DATA: Song[] = [
   {
     id: '19',
     title: 'Látigo',
-    artist: 'Lebron DelGuetto x Bakzord x Pereiranboy',
+    artist: 'Lebron DelGhetto x Bakzord x Pereiranboy',
     coverUrl: 'https://res.cloudinary.com/dlljikxgk/image/upload/v1765923383/L%C3%A1tigo_nl5gc9.jpg',
     audioUrl: 'https://res.cloudinary.com/dlljikxgk/video/upload/v1765923384/L%C3%A1tigo_w5ozcw.mp3',
     releaseDate: 'Remix'
@@ -223,7 +223,7 @@ export const PLAYLIST_DATA: Song[] = [
   {
     id: '20',
     title: 'TOTOQ',
-    artist: 'Lebron DelGuetto x Bakzord x Akira',
+    artist: 'Lebron DelGhetto x Bakzord x Akira',
     coverUrl: 'https://res.cloudinary.com/dlljikxgk/image/upload/v1765920891/Totoq_u04y01.jpg',
     audioUrl: 'https://res.cloudinary.com/dlljikxgk/video/upload/v1765920893/Totoq_ltc25r.mp3',
     releaseDate: 'Reciente'
@@ -423,7 +423,7 @@ export const PLAYLIST_DATA: Song[] = [
   {
     id: '45',
     title: 'Voodoo',
-    artist: 'Lebron DelGuetto',
+    artist: 'Lebron DelGhetto',
     coverUrl: 'https://res.cloudinary.com/dlljikxgk/image/upload/v1769675001/Voodoo_lplj7g.jpg',
     audioUrl: 'https://res.cloudinary.com/dlljikxgk/video/upload/v1769675008/Voodoo_evo61a.mp3',
     releaseDate: 'Estreno'
