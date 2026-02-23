@@ -131,6 +131,74 @@ export const Player: React.FC<PlayerProps> = ({
     }
   }, [volume, isMuted]);
 
+  // Media Session API: configurar metadata y handlers para controles del sistema (play/pause/next/prev/seek)
+  useEffect(() => {
+    const ms = (navigator as any).mediaSession;
+    if (!ms) return;
+
+    try {
+      ms.metadata = new (window as any).MediaMetadata({
+        title: currentTrack.title || 'La Perla Radio',
+        artist: currentTrack.artist || 'La Perla',
+        artwork: [
+          { src: currentTrack.cover || '', sizes: '96x96',   type: 'image/png' },
+          { src: currentTrack.cover || '', sizes: '128x128', type: 'image/png' },
+          { src: currentTrack.cover || '', sizes: '192x192', type: 'image/png' },
+          { src: currentTrack.cover || '', sizes: '256x256', type: 'image/png' },
+          { src: currentTrack.cover || '', sizes: '384x384', type: 'image/png' },
+        ]
+      });
+    } catch (err) {
+      // Some browsers might throw if MediaMetadata constructor isn't available
+    }
+
+    ms.playbackState = isPlaying ? 'playing' : 'paused';
+
+    const safeSet = (action: string, handler: any) => {
+      try { ms.setActionHandler(action, handler); } catch (e) {}
+    };
+
+    safeSet('play', onTogglePlay);
+    safeSet('pause', onTogglePlay);
+    safeSet('previoustrack', onPrev || (() => {}));
+    safeSet('nexttrack', onNext || (() => {}));
+
+    // seekto: if the user seeks to end (or very near to duration), treat as nexttrack
+    safeSet('seekto', (details: any) => {
+      if (!audioRef.current) return;
+      const seekTime = details && typeof details.seekTime === 'number' ? details.seekTime : null;
+      if (seekTime === null) return;
+
+      // if seeking to (nearly) the end, interpret as 'next track'
+      if (duration && seekTime >= Math.max(0, duration - 2)) {
+        if (onNext) onNext();
+        return;
+      }
+
+      audioRef.current.currentTime = Math.min(Math.max(0, seekTime), duration || seekTime);
+    });
+
+    // handle seekforward / seekbackward if provided by platform
+    safeSet('seekforward', (details: any) => {
+      if (!audioRef.current) return;
+      const offset = details && typeof details.seekOffset === 'number' ? details.seekOffset : 10;
+      const newTime = Math.min((audioRef.current.currentTime || 0) + offset, duration || Infinity);
+      audioRef.current.currentTime = newTime;
+    });
+
+    safeSet('seekbackward', (details: any) => {
+      if (!audioRef.current) return;
+      const offset = details && typeof details.seekOffset === 'number' ? details.seekOffset : 10;
+      const newTime = Math.max((audioRef.current.currentTime || 0) - offset, 0);
+      audioRef.current.currentTime = newTime;
+    });
+
+    return () => {
+      const actions = ['play','pause','previoustrack','nexttrack','seekto','seekforward','seekbackward'];
+      actions.forEach(a => { try { ms.setActionHandler(a, null); } catch (e) {} });
+    };
+  }, [currentTrack, isPlaying, onNext, onPrev, onTogglePlay, duration]);
+
   const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = Number(e.target.value);
     if (audioRef.current) {
