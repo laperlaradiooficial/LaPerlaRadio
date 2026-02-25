@@ -473,4 +473,20 @@ export const PLAYLIST_DATA: Song[] = [
     audioUrl: 'https://res.cloudinary.com/dwahbaa1r/video/upload/v1771606585/FRANCIA_BRYAN_BUENO_KA_PROD_El_VIDEO_x1wyv8.wav',
     releaseDate: 'Nuevo'
   },
+  {
+    id: '50',
+    title: 'Tattoo',
+    artist: 'Starboy',
+    coverUrl: 'https://res.cloudinary.com/dwahbaa1r/image/upload/v1771988188/Tattoo_mkjkq6.jpg',
+    audioUrl: 'https://res.cloudinary.com/dwahbaa1r/video/upload/v1771988157/STARBOY_-_TATTOO_Visualizer_ujidbj.wav',
+    releaseDate: 'Nuevo'
+  },
+  {
+    id: '51',
+    title: 'NFOK3',
+    artist: 'Cash Louki',
+    coverUrl: 'https://res.cloudinary.com/dwahbaa1r/image/upload/v1771988465/NFOK3_tikl8o.jpg',
+    audioUrl: 'https://res.cloudinary.com/dwahbaa1r/video/upload/v1771988426/Braggy_Marl_Ca_h_Louki_-_NFOK3_shot_by._gsimongarcia__iqlszk.wav',
+    releaseDate: 'Nuevo'
+  },
 ];
