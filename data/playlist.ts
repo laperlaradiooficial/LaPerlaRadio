@@ -505,4 +505,12 @@ export const PLAYLIST_DATA: Song[] = [
     audioUrl: 'https://res.cloudinary.com/dwahbaa1r/video/upload/v1771998915/Stunt_la_perla_ti5mhk.mp3',
     releaseDate: 'Nuevo'
   },
+  {
+    id: '54',
+    title: 'Besame',
+    artist: 'Darzeell',
+    coverUrl: 'https://res.cloudinary.com/dwahbaa1r/image/upload/v1772000735/BESAME_siihol.jpg',
+    audioUrl: 'https://res.cloudinary.com/dwahbaa1r/video/upload/v1772000746/B%C3%89SAME_OFICIAL_YOUTUBE_byhr0b.mp3',
+    releaseDate: 'Nuevo'
+  },
 ];

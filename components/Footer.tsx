@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Facebook, Instagram, Twitter, Youtube, Mail, MapPin, Eye, Activity, BarChart3 } from 'lucide-react';
+import { Instagram, Mail, MapPin, Eye, Activity, BarChart3 } from 'lucide-react';
 
 export const Footer: React.FC = () => {
   const [viewCount, setViewCount] = useState<string>("24,500");
@@ -82,13 +82,21 @@ export const Footer: React.FC = () => {
                <span className="text-[10px] font-bold text-zinc-400 tracking-widest uppercase group-hover:text-urban-gold transition-colors">Pereira, Colombia</span>
             </div>
 
-            <div className="flex gap-4 mb-8">
-              {[Instagram, Twitter, Facebook, Youtube].map((Icon, i) => (
-                <a key={i} href="#" className="w-8 h-8 rounded bg-zinc-900 flex items-center justify-center text-zinc-400 hover:text-urban-gold hover:bg-zinc-800 transition-colors">
-                  <Icon size={16} />
-                </a>
-              ))}
-            </div>
+            <a
+              href="https://www.instagram.com/laperlaradio/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="La Perla Radio en Instagram"
+              className="group inline-flex items-center gap-3 mb-8 px-4 py-2.5 rounded-lg border border-zinc-800 bg-zinc-900/60 hover:border-pink-500/50 hover:bg-gradient-to-r hover:from-purple-900/30 hover:via-pink-900/30 hover:to-orange-900/30 transition-all duration-300"
+            >
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-gradient-to-br from-purple-500 via-pink-500 to-orange-400 shadow-lg shadow-pink-500/20 group-hover:shadow-pink-500/40 transition-shadow">
+                <Instagram size={16} className="text-white" strokeWidth={2} />
+              </div>
+              <div className="leading-none">
+                <p className="text-white text-xs font-bold tracking-widest uppercase">@laperlaradio</p>
+                <p className="text-zinc-500 text-[10px] mt-0.5 tracking-wide">Síguenos en Instagram</p>
+              </div>
+            </a>
 
             {/* Stats Decoration Box */}
             <div className="bg-zinc-900/50 border border-zinc-800 rounded-lg p-4 backdrop-blur-sm shadow-inner">
