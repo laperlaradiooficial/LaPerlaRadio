@@ -489,4 +489,20 @@ export const PLAYLIST_DATA: Song[] = [
     audioUrl: 'https://res.cloudinary.com/dwahbaa1r/video/upload/v1771988426/Braggy_Marl_Ca_h_Louki_-_NFOK3_shot_by._gsimongarcia__iqlszk.wav',
     releaseDate: 'Nuevo'
   },
+  {
+    id: '52',
+    title: 'Junto a mi',
+    artist: 'Starboy',
+    coverUrl: 'https://res.cloudinary.com/dwahbaa1r/image/upload/v1771998514/Junto_a_Mi_wgxjab.jpg',
+    audioUrl: 'https://res.cloudinary.com/dwahbaa1r/video/upload/v1771998596/Junto_a_Mi_sgraer.mp3',
+    releaseDate: 'Nuevo'
+  },
+  {
+    id: '53',
+    title: 'Stunt la Perla',
+    artist: 'Darzeell',
+    coverUrl: 'https://res.cloudinary.com/dwahbaa1r/image/upload/v1771998903/Stunt_la_Perla_vl5nsz.jpg',
+    audioUrl: 'https://res.cloudinary.com/dwahbaa1r/video/upload/v1771998915/Stunt_la_perla_ti5mhk.mp3',
+    releaseDate: 'Nuevo'
+  },
 ];
