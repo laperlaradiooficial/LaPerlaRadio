@@ -519,6 +519,6 @@ export const PLAYLIST_DATA: Song[] = [
     artist: 'Felim',
     coverUrl: 'https://res.cloudinary.com/dwahbaa1r/image/upload/v1772133434/ab67616d0000b273f07ff1da970ae8b25aff65bb_j7roza.jpg',
     audioUrl: 'https://res.cloudinary.com/dwahbaa1r/video/upload/v1772133467/Felim_-_Perro_Malo_hlxvzk.wav',
-    releaseDate: 'Nuevo'
+    releaseDate: 'Perreo'
   },
 ];

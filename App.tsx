@@ -7,9 +7,10 @@ import { SpotifySection } from './components/SpotifySection';
 import { NewsSection } from './components/NewsSection';
 import { CommentsSection } from './components/CommentsSection';
 import { Player } from './components/Player';
+import { ExpandedPlayer } from './components/ExpandedPlayer';
 import { Footer } from './components/Footer';
 import { PLAYLIST_DATA } from './data/playlist';
-import { Song } from './types';
+import { Song, StreamStatus } from './types';
 import { Heart, CheckCircle2 } from 'lucide-react';
 
 const App: React.FC = () => {
@@ -26,6 +27,20 @@ const App: React.FC = () => {
   // Global filter state for artist
   const [selectedArtist, setSelectedArtist] = useState<string | null>(null);
   const [isReleasesExpanded, setIsReleasesExpanded] = useState(false);
+  
+  // Expanded Player state
+  const [isExpandedPlayerOpen, setIsExpandedPlayerOpen] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [status, setStatus] = useState<StreamStatus>(StreamStatus.OFFLINE);
+  const [volume, setVolume] = useState(80);
+  const [isMuted, setIsMuted] = useState(false);
+  
+  // Ref para rastrear seeks intencionales desde ExpandedPlayer
+  const seekIntentRef = React.useRef<boolean>(false);
+  
+  // Ref para acceder al audio element desde ExpandedPlayer
+  const audioRefFromPlayer = React.useRef<HTMLAudioElement | null>(null);
 
   // Initialize and load favorites
   useEffect(() => {
@@ -186,7 +201,7 @@ const App: React.FC = () => {
       
       {/* Toast Notification */}
       {notification && (
-        <div className="fixed top-24 left-1/2 -translate-x-1/2 z-[100] animate-in slide-in-from-top-4 fade-in duration-300">
+        <div className="fixed top-24 left-1/2 -translate-x-1/2 z-[110] animate-in slide-in-from-top-4 fade-in duration-300">
            <div className={`flex items-center gap-3 px-6 py-3 rounded-full shadow-2xl backdrop-blur-md border ${notification.type === 'add' ? 'bg-urban-gold/90 text-black border-urban-gold' : 'bg-zinc-800/90 text-white border-zinc-700'}`}>
               {notification.type === 'add' ? <CheckCircle2 size={18} /> : <Heart size={18} className="text-urban-red" />}
               <span className="text-sm font-bold uppercase tracking-widest">{notification.message}</span>
@@ -330,6 +345,55 @@ const App: React.FC = () => {
         onArtistClick={handleArtistSelectFromPlayer}
         favorites={favorites}
         onToggleFavorite={handleToggleFavorite}
+        onOpenExpanded={() => setIsExpandedPlayerOpen(true)}
+        onUpdateTime={setCurrentTime}
+        onUpdateDuration={setDuration}
+        onUpdateStatus={setStatus}
+        volume={volume}
+        onVolumeChange={setVolume}
+        isMuted={isMuted}
+        onMuteToggle={() => setIsMuted(!isMuted)}
+        seekIntentRef={seekIntentRef}
+        onAudioRefReady={(ref) => { audioRefFromPlayer.current = ref; }}
+      />
+
+      <ExpandedPlayer
+        isOpen={isExpandedPlayerOpen}
+        onClose={() => setIsExpandedPlayerOpen(false)}
+        currentTrack={{
+          title: currentTrack?.title || "La Perla Radio",
+          artist: currentTrack?.artist || "Pereira",
+          cover: currentTrack?.coverUrl || "https://i.imgur.com/dNgPbIo.jpeg"
+        }}
+        audioUrl={currentTrack?.audioUrl}
+        isPlaying={isPlaying}
+        onTogglePlay={() => setIsPlaying(!isPlaying)}
+        onNext={handleNext}
+        onPrev={handlePrev}
+        playlist={playlist}
+        currentTrackIndex={currentTrackIndex}
+        onSelectTrack={handleTrackSelect}
+        isShuffle={isShuffle}
+        onToggleShuffle={() => setIsShuffle(!isShuffle)}
+        onReorderPlaylist={handleReorderPlaylist}
+        currentTime={currentTime}
+        duration={duration}
+        onSeek={(time) => {
+          // Usar el audio ref de Player para cambiar currentTime directamente
+          if (audioRefFromPlayer.current) {
+            audioRefFromPlayer.current.currentTime = time;
+          }
+          setCurrentTime(time);
+        }}
+        volume={volume}
+        onVolumeChange={setVolume}
+        isMuted={isMuted}
+        onMuteToggle={() => setIsMuted(!isMuted)}
+        status={status}
+        favorites={favorites}
+        onToggleFavorite={handleToggleFavorite}
+        onArtistClick={handleArtistSelectFromPlayer}
+        onNotification={(message, type) => setNotification({ message, type })}
       />
       
       <Footer />

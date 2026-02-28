@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { Play, Pause, Volume2, VolumeX, SkipBack, SkipForward, Shuffle, ListMusic, X, BarChart2, Trash2, GripVertical, Heart } from 'lucide-react';
 import { StreamStatus, Song } from '../types';
 
@@ -18,6 +18,16 @@ interface PlayerProps {
   onArtistClick?: (artist: string) => void;
   favorites?: string[];
   onToggleFavorite?: (id: string) => void;
+  onOpenExpanded?: () => void;
+  onUpdateTime?: (time: number) => void;
+  onUpdateDuration?: (duration: number) => void;
+  onUpdateStatus?: (status: StreamStatus) => void;
+  volume?: number;
+  onVolumeChange?: (volume: number) => void;
+  isMuted?: boolean;
+  onMuteToggle?: () => void;
+  seekIntentRef?: React.MutableRefObject<boolean>;
+  onAudioRefReady?: (ref: HTMLAudioElement | null) => void;
 }
 
 export const Player: React.FC<PlayerProps> = ({ 
@@ -35,9 +45,20 @@ export const Player: React.FC<PlayerProps> = ({
   onReorderPlaylist,
   onArtistClick,
   favorites = [],
-  onToggleFavorite
+  onToggleFavorite,
+  onOpenExpanded,
+  onUpdateTime,
+  onUpdateDuration,
+  onUpdateStatus,
+  volume: externalVolume,
+  onVolumeChange,
+  isMuted: externalIsMuted,
+  onMuteToggle,
+  seekIntentRef,
+  onAudioRefReady,
 }) => {
-  const [volume, setVolume] = useState(80);
+  const [localVolume, setLocalVolume] = useState(externalVolume ?? 80);
+  const [localIsMuted, setLocalIsMuted] = useState(externalIsMuted ?? false);
   const [isMuted, setIsMuted] = useState(false);
   const [status, setStatus] = useState<StreamStatus>(StreamStatus.OFFLINE);
   const [isQueueOpen, setIsQueueOpen] = useState(false);
@@ -51,28 +72,56 @@ export const Player: React.FC<PlayerProps> = ({
   
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Improved helper to parse multiple artists from a string
-  const parseArtists = (artistStr: string) => {
+  // Memoized helpers
+  const parseArtists = useCallback((artistStr: string) => {
     return artistStr
       .split(/\s*,\s*|\s+(?:x|Ft\.|ft\.|feat\.|&)\s+/i)
       .map(a => a.trim())
       .filter(Boolean);
-  };
+  }, []);
+
+  const artists = useMemo(() => parseArtists(currentTrack.artist), [currentTrack.artist, parseArtists]);
+  const currentSong = useMemo(() => playlist[currentTrackIndex], [playlist, currentTrackIndex]);
+  const isCurrentFavorite = useMemo(() => currentSong && favorites.includes(currentSong.id), [currentSong, favorites]);
+  const progressPercent = useMemo(() => (duration > 0 ? (currentTime / duration) * 100 : 0), [currentTime, duration]);
+  const volumeToUse = useMemo(() => externalVolume ?? localVolume, [externalVolume, localVolume]);
+  const isMutedToUse = useMemo(() => externalIsMuted ?? localIsMuted, [externalIsMuted, localIsMuted]);
+  const displayVolume = useMemo(() => (isMutedToUse ? 0 : volumeToUse), [isMutedToUse, volumeToUse]);
 
   // Inicializar audio una sola vez
   if (!audioRef.current) {
     audioRef.current = new Audio();
+    audioRef.current.crossOrigin = "anonymous";
+    audioRef.current.preload = "metadata";
   }
 
   useEffect(() => {
     const audio = audioRef.current!;
     
-    const handlePlay = () => setStatus(StreamStatus.LIVE);
-    const handlePause = () => setStatus(StreamStatus.OFFLINE);
-    const handleWaiting = () => setStatus(StreamStatus.BUFFERING);
-    const handleError = () => setStatus(StreamStatus.OFFLINE);
-    const handleTimeUpdate = () => setCurrentTime(audio.currentTime);
-    const handleLoadedMetadata = () => setDuration(audio.duration);
+    const handlePlay = () => {
+      setStatus(StreamStatus.LIVE);
+      onUpdateStatus?.(StreamStatus.LIVE);
+    };
+    const handlePause = () => {
+      setStatus(StreamStatus.OFFLINE);
+      onUpdateStatus?.(StreamStatus.OFFLINE);
+    };
+    const handleWaiting = () => {
+      setStatus(StreamStatus.BUFFERING);
+      onUpdateStatus?.(StreamStatus.BUFFERING);
+    };
+    const handleError = () => {
+      setStatus(StreamStatus.OFFLINE);
+      onUpdateStatus?.(StreamStatus.OFFLINE);
+    };
+    const handleTimeUpdate = () => {
+      setCurrentTime(audio.currentTime);
+      onUpdateTime?.(audio.currentTime);
+    };
+    const handleLoadedMetadata = () => {
+      setDuration(audio.duration);
+      onUpdateDuration?.(audio.duration);
+    };
     const handleEnded = () => { if (onNext) onNext(); };
 
     audio.addEventListener('play', handlePlay);
@@ -94,42 +143,105 @@ export const Player: React.FC<PlayerProps> = ({
       audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
       audio.removeEventListener('ended', handleEnded);
     };
-  }, [onNext]);
+  }, [onNext, onUpdateTime, onUpdateDuration, onUpdateStatus]);
 
   // Sincronizar URL
   useEffect(() => {
     if (audioUrl && audioRef.current) {
       const isSameSource = audioRef.current.src === audioUrl;
       if (!isSameSource) {
+        // Pausar antes de cambiar la src para evitar problemas en mobile
+        audioRef.current.pause();
         audioRef.current.src = audioUrl;
         audioRef.current.load();
-        if (isPlaying) {
-          audioRef.current.play().catch(e => console.warn("Playback prevented", e));
-        }
+        
+        // Esperar a que el audio esté listo antes de reproducir
+        const playAudio = () => {
+          if (isPlaying) {
+            audioRef.current?.play().catch(e => console.warn("Playback prevented", e));
+          }
+          audioRef.current?.removeEventListener('canplay', playAudio);
+        };
+        
+        audioRef.current.addEventListener('canplay', playAudio);
+        
+        // Timeout por si no hay evento canplay
+        const timeout = setTimeout(() => {
+          if (isPlaying && audioRef.current) {
+            audioRef.current.play().catch(e => console.warn("Playback prevented", e));
+          }
+        }, 100);
+        
+        return () => clearTimeout(timeout);
       }
     }
-  }, [audioUrl]);
+  }, [audioUrl, isPlaying]);
 
   // Sincronizar Play/Pause
   useEffect(() => {
-    if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.play().catch(e => {
-          console.warn("Playback failed", e);
-          setStatus(StreamStatus.OFFLINE);
-        });
-      } else {
-        audioRef.current.pause();
+    if (!audioRef.current) return;
+    
+    if (isPlaying) {
+      // Intentar reproducir con mejor manejo de errores
+      const playPromise = audioRef.current.play();
+      
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            // Reproducción exitosa
+          })
+          .catch(error => {
+            console.warn("Autoplay failed:", error);
+            setStatus(StreamStatus.OFFLINE);
+          });
       }
+    } else {
+      audioRef.current.pause();
     }
   }, [isPlaying]);
 
   // Sincronizar Volumen
   useEffect(() => {
     if (audioRef.current) {
-      audioRef.current.volume = isMuted ? 0 : volume / 100;
+      const volumeToUse = externalVolume !== undefined ? externalVolume : localVolume;
+      const isMutedToUse = externalIsMuted !== undefined ? externalIsMuted : localIsMuted;
+      audioRef.current.volume = isMutedToUse ? 0 : volumeToUse / 100;
     }
-  }, [volume, isMuted]);
+  }, [externalVolume, localVolume, externalIsMuted, localIsMuted]);
+
+  // Ref para rastrear seeks intencionales (desde ExpandedPlayer)
+  const isIntentionalSeekRef = useRef<boolean>(false);
+
+  // Notificar a App cuando audioRef esté listo
+  useEffect(() => {
+    onAudioRefReady?.(audioRef.current);
+  }, [onAudioRefReady]);
+
+  // Sincronizar seek cuando el tiempo cambia externamente (desde ExpandedPlayer)
+  useEffect(() => {
+    if (!audioRef.current) return;
+    
+    // Si hay una ref compartida de intención, usarla
+    if (seekIntentRef?.current) {
+      try {
+        audioRef.current.currentTime = currentTime;
+      } catch (err) {
+        // Silenciar errores
+      }
+      seekIntentRef.current = false; // Reset
+      return;
+    }
+    
+    // Si no, usar la ref local
+    if (isIntentionalSeekRef.current) {
+      try {
+        audioRef.current.currentTime = currentTime;
+      } catch (err) {
+        // Silenciar errores
+      }
+      isIntentionalSeekRef.current = false; // Reset el flag
+    }
+  }, [currentTime, seekIntentRef]);
 
   // Media Session API: configurar metadata y handlers para controles del sistema (play/pause/next/prev/seek)
   useEffect(() => {
@@ -199,27 +311,26 @@ export const Player: React.FC<PlayerProps> = ({
     };
   }, [currentTrack, isPlaying, onNext, onPrev, onTogglePlay, duration]);
 
-  const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSeek = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const val = Number(e.target.value);
     if (audioRef.current) {
       audioRef.current.currentTime = val;
       setCurrentTime(val);
     }
-  };
+  }, []);
 
   // Drag and Drop Handlers
-  const handleDragStart = (e: React.DragEvent<HTMLDivElement>, index: number) => {
+  const handleDragStart = useCallback((e: React.DragEvent<HTMLDivElement>, index: number) => {
     setDraggedItemIndex(index);
     e.dataTransfer.effectAllowed = "move";
-    // Set transparent image or modify drag image if needed, for now default is fine
-  };
+  }, []);
 
-  const handleDragOver = (e: React.DragEvent<HTMLDivElement>, index: number) => {
-    e.preventDefault(); // Necessary to allow dropping
+  const handleDragOver = useCallback((e: React.DragEvent<HTMLDivElement>, index: number) => {
+    e.preventDefault();
     setDragOverIndex(index);
-  };
+  }, []);
 
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>, index: number) => {
+  const handleDrop = useCallback((e: React.DragEvent<HTMLDivElement>, index: number) => {
     e.preventDefault();
     if (draggedItemIndex === null || !onReorderPlaylist) return;
 
@@ -230,33 +341,25 @@ export const Player: React.FC<PlayerProps> = ({
     onReorderPlaylist(newPlaylist);
     setDraggedItemIndex(null);
     setDragOverIndex(null);
-  };
+  }, [draggedItemIndex, playlist, onReorderPlaylist]);
 
-  const handleDragEnd = () => {
+  const handleDragEnd = useCallback(() => {
     setDraggedItemIndex(null);
     setDragOverIndex(null);
-  };
+  }, []);
 
-  const handleHeartClick = (id: string) => {
+  const handleHeartClick = useCallback((id: string) => {
     if (onToggleFavorite) {
       setIsHeartAnimating(true);
       onToggleFavorite(id);
       setTimeout(() => setIsHeartAnimating(false), 300);
     }
-  };
-
-  const progressPercent = duration ? (currentTime / duration) * 100 : 0;
-  const displayVolume = isMuted ? 0 : volume;
-  const artists = parseArtists(currentTrack.artist);
-
-  // Identify current song ID for favorites
-  const currentSong = playlist[currentTrackIndex];
-  const isCurrentFavorite = currentSong ? favorites.includes(currentSong.id) : false;
+  }, [onToggleFavorite]);
 
   return (
-    <div className="fixed bottom-0 left-0 w-full z-50">
+    <div className="fixed bottom-0 left-0 w-full z-50" style={{ contain: 'layout style' }}>
       {/* COLA DE REPRODUCCIÓN */}
-      <div className={`absolute bottom-full right-0 md:right-4 mb-2 w-full md:w-[400px] bg-zinc-900/98 backdrop-blur-xl border border-zinc-700 rounded-t-xl md:rounded-xl shadow-2xl transition-all duration-300 ease-in-out transform origin-bottom ${isQueueOpen ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-10 opacity-0 scale-95 pointer-events-none'}`}>
+      <div className={`absolute bottom-full right-0 md:right-4 mb-2 w-full md:w-[400px] bg-zinc-900/98 backdrop-blur-xl border border-zinc-700 rounded-t-xl md:rounded-xl shadow-2xl transition-all duration-300 ease-in-out transform origin-bottom ${isQueueOpen ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-10 opacity-0 scale-95 pointer-events-none'}`} style={{ willChange: isQueueOpen ? 'transform, opacity' : 'auto' }}>
         <div className="flex items-center justify-between p-4 border-b border-zinc-800 bg-zinc-950/50 rounded-t-xl">
           <div className="flex items-center gap-2">
             <ListMusic className="text-urban-gold" size={18} />
@@ -309,23 +412,33 @@ export const Player: React.FC<PlayerProps> = ({
       <div className="bg-urban-black/95 backdrop-blur-md border-t border-zinc-800 shadow-2xl relative">
         <div className="relative w-full h-1.5 group cursor-pointer hover:h-2.5 transition-all duration-200">
            <div className="absolute inset-0 bg-zinc-800 w-full h-full"></div>
-           <div className="absolute top-0 left-0 h-full bg-gradient-to-r from-urban-gold to-urban-red transition-all duration-100 ease-linear pointer-events-none z-10" style={{ width: `${progressPercent}%` }}></div>
-           <input type="range" min={0} max={duration || 100} value={currentTime} onChange={handleSeek} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" step="0.1" />
+           <div className="absolute top-0 left-0 h-full bg-gradient-to-r from-urban-gold to-urban-red transition-all duration-100 ease-linear pointer-events-none z-10" style={{ width: `${progressPercent}%`, willChange: 'width', transform: 'translateZ(0)' }}></div>
+           <input type="range" min={0} max={duration || 100} value={currentTime} onChange={handleSeek} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" step="0.1" style={{ touchAction: 'none' }} />
         </div>
 
         <div className="container mx-auto px-4 h-20 flex items-center justify-between mt-2">
           
           {/* TRACK INFO LEFT */}
           <div className="flex items-center gap-3 md:gap-4 w-[50%] md:w-1/3 min-w-0 pr-2 group/player-info">
-            <div className="relative group/cover shrink-0">
-               <img src={currentTrack.cover} alt="Art" className={`w-10 h-10 md:w-14 md:h-14 rounded-sm object-cover border border-zinc-700 shadow-lg ${isPlaying ? 'animate-[spin_20s_linear_infinite]' : ''}`} />
+            <div className="relative group/cover shrink-0 cursor-pointer" onClick={onOpenExpanded}>
+               <img 
+                 src={currentTrack.cover} 
+                 alt="Art" 
+                 className={`w-10 h-10 md:w-14 md:h-14 rounded-sm object-cover border border-zinc-700 shadow-lg ${isPlaying ? 'animate-[spin_20s_linear_infinite]' : ''}`}
+                 style={{ 
+                   willChange: isPlaying ? 'transform' : 'auto',
+                   transform: 'translateZ(0)',
+                   backfaceVisibility: 'hidden'
+                 }}
+                 loading="eager"
+               />
             </div>
             
             <div className="overflow-hidden flex-1 min-w-0 flex flex-col justify-center">
               
               {/* Contenedor Flex para Título y Corazón juntos */}
               <div className="flex items-center gap-3">
-                <h3 className="text-white font-bold text-xs md:text-base truncate display-font tracking-wide uppercase leading-tight">
+                <h3 className="text-white font-bold text-xs md:text-base truncate display-font tracking-wide uppercase leading-tight cursor-pointer hover:text-urban-gold transition-colors" onClick={onOpenExpanded}>
                   {currentTrack.title}
                 </h3>
                 
@@ -373,11 +486,35 @@ export const Player: React.FC<PlayerProps> = ({
 
           <div className="flex flex-col items-center justify-center flex-1">
             <div className="flex items-center gap-2 md:gap-6">
-               <button onClick={onToggleShuffle} className={`p-1.5 transition-colors ${isShuffle ? 'text-urban-gold' : 'text-zinc-600 hover:text-zinc-400'}`}><Shuffle size={18} /></button>
-               <button onClick={onPrev} className="text-zinc-400 hover:text-urban-gold transition-colors"><SkipBack size={20} fill="currentColor" /></button>
-               <button onClick={onTogglePlay} className="w-11 h-11 md:w-12 md:h-12 rounded-full bg-urban-red text-white flex items-center justify-center hover:bg-red-600 transition-all active:scale-90 shadow-[0_0_20px_rgba(218,41,28,0.3)] border border-white/10">{isPlaying ? <Pause fill="currentColor" size={22} /> : <Play fill="currentColor" size={22} className="ml-1" />}</button>
-               <button onClick={onNext} className="text-zinc-400 hover:text-urban-gold transition-colors"><SkipForward size={20} fill="currentColor" /></button>
-               <button onClick={() => setIsQueueOpen(!isQueueOpen)} className="md:hidden p-1.5 rounded transition-all text-zinc-600"><ListMusic size={20} /></button>
+               <button 
+                 onClick={onToggleShuffle} 
+                 className={`p-1.5 transition-colors active:scale-95 ${isShuffle ? 'text-urban-gold' : 'text-zinc-600 hover:text-zinc-400'}`}
+                 style={{ touchAction: 'manipulation', transform: 'translateZ(0)' }}
+               >
+                 <Shuffle size={18} />
+               </button>
+               <button 
+                 onClick={onPrev} 
+                 className="text-zinc-400 hover:text-urban-gold transition-colors active:scale-95"
+                 style={{ touchAction: 'manipulation', transform: 'translateZ(0)' }}
+               >
+                 <SkipBack size={20} fill="currentColor" />
+               </button>
+               <button 
+                 onClick={onTogglePlay} 
+                 className="w-11 h-11 md:w-12 md:h-12 rounded-full bg-urban-red text-white flex items-center justify-center hover:bg-red-600 transition-all active:scale-90 shadow-[0_0_20px_rgba(218,41,28,0.3)] border border-white/10"
+                 style={{ touchAction: 'manipulation', transform: 'translateZ(0)', willChange: 'transform' }}
+               >
+                 {isPlaying ? <Pause fill="currentColor" size={22} /> : <Play fill="currentColor" size={22} className="ml-1" />}
+               </button>
+               <button 
+                 onClick={onNext} 
+                 className="text-zinc-400 hover:text-urban-gold transition-colors active:scale-95"
+                 style={{ touchAction: 'manipulation', transform: 'translateZ(0)' }}
+               >
+                 <SkipForward size={20} fill="currentColor" />
+               </button>
+               <button onClick={() => setIsQueueOpen(!isQueueOpen)} className="md:hidden p-1.5 rounded transition-all text-zinc-600" style={{ touchAction: 'manipulation' }}><ListMusic size={20} /></button>
             </div>
             <div className="hidden md:flex mt-1 items-center gap-2">
               <div className={`w-2 h-2 rounded-full ${status === StreamStatus.LIVE ? 'bg-urban-gold animate-pulse-fast' : status === StreamStatus.BUFFERING ? 'bg-urban-red' : 'bg-zinc-600'}`}></div>
@@ -387,11 +524,19 @@ export const Player: React.FC<PlayerProps> = ({
 
           <div className="hidden md:flex items-center justify-end gap-6 w-1/3">
              <div className="flex items-center gap-2 group">
-              <button onClick={() => setIsMuted(!isMuted)} className="text-zinc-400 hover:text-urban-gold">{isMuted || volume === 0 ? <VolumeX size={20} /> : <Volume2 size={20} />}</button>
+              <button onClick={() => {
+                const newMutedValue = !isMutedToUse;
+                setLocalIsMuted(newMutedValue);
+                onMuteToggle?.();
+              }} className="text-zinc-400 hover:text-urban-gold">{isMutedToUse || volumeToUse === 0 ? <VolumeX size={20} /> : <Volume2 size={20} />}</button>
               <div className="relative w-20 lg:w-28 h-1 group cursor-pointer hover:h-2 transition-all duration-200">
                 <div className="absolute inset-0 bg-zinc-800 w-full h-full rounded-full"></div>
                 <div className="absolute top-0 left-0 h-full bg-gradient-to-r from-urban-gold to-urban-red rounded-full pointer-events-none" style={{ width: `${displayVolume}%` }}></div>
-                <input type="range" min="0" max="100" value={isMuted ? 0 : volume} onChange={(e) => setVolume(Number(e.target.value))} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
+                <input type="range" min="0" max="100" value={isMutedToUse ? 0 : volumeToUse} onChange={(e) => {
+                  const newValue = Number(e.target.value);
+                  setLocalVolume(newValue);
+                  onVolumeChange?.(newValue);
+                }} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
               </div>
             </div>
             <button onClick={() => setIsQueueOpen(!isQueueOpen)} className={`p-2 rounded-lg transition-all ${isQueueOpen ? 'bg-urban-gold text-black' : 'text-zinc-400 hover:text-white hover:bg-zinc-800'}`}><ListMusic size={20} /></button>
