@@ -521,4 +521,20 @@ export const PLAYLIST_DATA: Song[] = [
     audioUrl: 'https://res.cloudinary.com/dwahbaa1r/video/upload/v1772133467/Felim_-_Perro_Malo_hlxvzk.wav',
     releaseDate: 'Perreo'
   },
+  {
+    id: '56',
+    title: '¿Pa\' que?',
+    artist: 'Asiian',
+    coverUrl: 'https://res.cloudinary.com/dwahbaa1r/image/upload/v1772597782/IMG_2212.JPG_hibrso.jpg',
+    audioUrl: 'https://res.cloudinary.com/dwahbaa1r/video/upload/v1772597759/Pa-que-_-Asiian-By-KA-_-The-Mastersound.mp3_pyv3et.mp3',
+    releaseDate: 'Nuevo'
+  },
+  {
+    id: '57',
+    title: 'Dangerous',
+    artist: 'Asiian',
+    coverUrl: 'https://res.cloudinary.com/dwahbaa1r/image/upload/v1772597815/IMG_2778_lcrned.png',
+    audioUrl: 'https://res.cloudinary.com/dwahbaa1r/video/upload/v1772597818/ASIIAN_-_DANGEROUS_Prod._by_StroxxOnThaBeat_2.mp3_qem6eg.mp3',
+    releaseDate: 'Nuevo'
+  },
 ];
