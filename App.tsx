@@ -291,14 +291,12 @@ const App: React.FC = () => {
                 <a href="https://www.instagram.com/adorartepereira/" target="_blank" rel="noopener noreferrer" aria-label="Adorarte Instagram" className="transform transition-transform duration-300 hover:scale-105 hover:-translate-y-1">
                   <img src="https://i.imgur.com/8I1glAC.png" alt="Adorarte" className="h-32 md:h-40 lg:h-48 object-contain" />
                 </a>
-                <span className="text-base text-zinc-200">Adorarte</span>
               </div>
 
               <div className="flex flex-col items-center gap-3">
                 <a href="https://www.instagram.com/ar.recordsco/" target="_blank" rel="noopener noreferrer" aria-label="Ar Records Instagram" className="transform transition-transform duration-300 hover:scale-105 hover:-translate-y-1">
                   <img src="https://i.imgur.com/y8pQaYL.png" alt="Ar Records" className="h-32 md:h-40 lg:h-48 object-contain" />
                 </a>
-                <span className="text-base text-zinc-200">Ar Records</span>
               </div>
 
               <div className="flex flex-col items-center gap-3">
@@ -318,7 +316,6 @@ const App: React.FC = () => {
                     </span>
                   </div>
                 </a>
-                <span className="text-base text-zinc-200">v13 Studio</span>
               </div>
             </div>
           </div>

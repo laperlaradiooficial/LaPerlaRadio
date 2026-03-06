@@ -7,9 +7,9 @@
   "theme_color": "#050505",
   "icons": [
     {
-      "src": "/favicon.svg",
+      "src": "https://res.cloudinary.com/dwahbaa1r/image/upload/v1772765379/logo_colores_512_x_512_popswa.png",
       "sizes": "any",
-      "type": "image/svg+xml"
+      "type": "image/png"
     }
   ]
 }

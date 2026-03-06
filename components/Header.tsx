@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Menu, X, Radio, Mic2, Heart } from 'lucide-react';
+import { Menu, X, Mic2, Heart } from 'lucide-react';
 
 export const Header: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -31,15 +31,17 @@ export const Header: React.FC = () => {
           onClick={(e) => handleNavClick(e, '#inicio')}
           className="flex items-center gap-2 text-white hover:opacity-80 transition-opacity cursor-pointer group"
         >
-          <div className="w-8 h-8 md:w-10 md:h-10 bg-urban-gold rounded flex items-center justify-center text-black shadow-lg shadow-yellow-500/20 group-hover:scale-105 transition-transform">
-            <Radio size={20} strokeWidth={2.5} />
-          </div>
+          <img 
+            src="https://res.cloudinary.com/dwahbaa1r/image/upload/v1772765379/logo_colores_512_x_512_popswa.png" 
+            alt="La Perla Radio Logo"
+            className="w-10 h-10 md:w-14 md:h-14 object-contain group-hover:scale-105 transition-transform"
+          />
           <div className="leading-none">
             <h1 className="text-2xl md:text-3xl font-bold display-font tracking-tighter text-white">
               LA PERLA
             </h1>
             <span className="text-[10px] md:text-xs font-bold tracking-[0.2em] text-urban-gold block -mt-1">
-              DIGITAL RADIO
+              RADIO DIGITAL
             </span>
           </div>
         </a>

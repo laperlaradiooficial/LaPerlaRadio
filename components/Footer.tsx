@@ -174,7 +174,7 @@ export const Footer: React.FC = () => {
         </div>
 
         <div className="border-t border-zinc-900 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-zinc-600">
-          <p>© 2024 La Perla Radio. Todos los derechos reservados.</p>
+          <p>© 2026 La Perla Radio. Todos los derechos reservados.</p>
           <p>Designed with <span className="text-urban-red">♥</span> for the streets.</p>
         </div>
       </div>

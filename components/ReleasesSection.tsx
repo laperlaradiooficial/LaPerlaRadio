@@ -188,7 +188,7 @@ export const ReleasesSection: React.FC<ReleasesSectionProps> = ({
             </p>
           </div>
           
-          <div className="flex items-center gap-4 w-full md:w-auto">
+          <div className="flex items-start gap-4 w-full md:w-auto md:justify-end">
             <div className="relative w-full md:w-64 group">
               <div className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 group-focus-within:text-urban-gold transition-colors">
                 <Search size={18} />
@@ -219,6 +219,7 @@ export const ReleasesSection: React.FC<ReleasesSectionProps> = ({
                 {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
               </button>
             )}
+
           </div>
         </div>
 

@@ -16,8 +16,8 @@ export const NewsSection: React.FC = () => {
   ];
 
   const newsContent = {
-    title: 'AR SESSIONS GALA 2024',
-    shortText: 'Un momento que superó todas las expectativas!! La gala de las AR SESSIONS reunió Artistas, Managers, productores...',
+    title: 'AR SESSIONS GALA 2026',
+    shortText: 'Un momento que superó todas las expectativas!! La gala de las AR SESSIONS reunió Artistas, Managers, productores...,',
     fullText: 'Un momento que superó todas las expectativas!! La gala de las AR SESSIONS reunió Artistas, Managers, productores y una parte importante de la industria musical urbana de Pereira y la región.\n\nAgradecemos también a la @camarapereira por el apoyo, a todos los asistentes y claramente a los artistas de la noche\n@pereiranboy @is_akiraaa @felim.v13 @sello_rap @isdajere @lebrondelghetto @echebb @_el.tomas_ @cashlouki @bryanbuenob2 muy tesos todos!!! 🔥🔥🔥'
   };
 
