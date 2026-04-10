@@ -24,7 +24,7 @@ const newsTimeline: NewsItem[] = [
   {
     id: 'ar-sessions-gala-2026',
     title: 'AR SESSIONS GALA 2026',
-    date: '25 de marzo de 2026',
+    date: '25 de febrero de 2026',
     shortText: 'Un momento que supero todas las expectativas. La gala de las AR SESSIONS reunio artistas, managers, productores y parte clave de la industria urbana de Pereira.',
     fullText: [
       'Un momento que supero todas las expectativas. La gala de las AR SESSIONS reunio artistas, managers, productores y una parte importante de la industria musical urbana de Pereira y la region.',
