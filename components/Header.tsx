@@ -32,7 +32,7 @@ export const Header: React.FC = () => {
           className="flex items-center gap-2 text-white hover:opacity-80 transition-opacity cursor-pointer group"
         >
           <img 
-            src="https://res.cloudinary.com/dwahbaa1r/image/upload/v1772765379/logo_colores_512_x_512_popswa.png" 
+            src="https://res.cloudinary.com/dwahbaa1r/image/upload/v1775787338/logoradionuevo512_bjuvtm.png" 
             alt="La Perla Radio Logo"
             className="w-10 h-10 md:w-14 md:h-14 object-contain group-hover:scale-105 transition-transform"
           />
