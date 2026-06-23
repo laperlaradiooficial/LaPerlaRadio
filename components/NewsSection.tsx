@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, Music2, X, ChevronLeft, ChevronRight, Clock3, Volume2, VolumeX, Instagram } from 'lucide-react';
+import { Music2, X, ChevronLeft, ChevronRight, Clock3, Volume2, VolumeX, Instagram } from 'lucide-react';
 
 type NewsMediaItem = {
   type: 'image' | 'video';
@@ -330,80 +330,8 @@ export const NewsSection: React.FC = () => {
           <div className="h-1 w-24 bg-gradient-to-r from-urban-gold to-urban-red rounded-full"></div>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6">
-          {/* EVENTOS CARD */}
-          <div className="bg-zinc-900/50 rounded-2xl border border-zinc-800 backdrop-blur-sm overflow-hidden relative">
-            <div className="flex flex-col relative z-10">
-              <div className="aspect-[4/3] relative">
-                <img
-                  src="https://i.imgur.com/0MNXct7.jpeg"
-                  alt="Evento en JUPITER Dosquebradas"
-                  className="w-full h-full object-cover shadow-none"
-                />
-                <div className="absolute bottom-4 left-4 right-4">
-                  <span className="inline-block bg-urban-gold text-zinc-950 px-4 py-2 rounded-full text-sm font-bold uppercase tracking-widest">
-                    Entrada GRATIS
-                  </span>
-                </div>
-              </div>
-
-              <div className="p-6 md:p-8 flex flex-col justify-start">
-                <h3 className="text-lg md:text-xl font-bold text-urban-gold uppercase tracking-widest mb-4">
-                  📅 Eventos de La Perla
-                </h3>
-
-                <div className="flex justify-start gap-3 mb-6">
-                  <div className="w-12 h-12 rounded-full bg-urban-gold/20 flex items-center justify-center border-2 border-urban-gold/40">
-                    <Calendar size={24} className="text-urban-gold" />
-                  </div>
-                </div>
-
-                <span className="inline-block bg-urban-red/20 text-urban-red border border-urban-red/30 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-4 w-fit">
-                  14 de Marzo
-                </span>
-
-                <h4 className="text-2xl md:text-3xl font-bold text-white display-font leading-tight mb-4 uppercase">
-                  PARTY EN MI BARRIO 2.0
-                </h4>
-
-                <p className="text-zinc-400 font-medium uppercase tracking-wide mb-2">
-                  Artistas: Cris JP, ESTEBAN ZG, Felim, 4Five
-                </p>
-                <p className="text-urban-gold text-base md:text-lg font-bold uppercase tracking-widest mb-6">
-                  6:00 PM · Entrada GRATIS
-                </p>
-
-                <div className="mt-4 flex flex-col gap-3">
-                  <a
-                    href="https://wa.me/573157279288"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-2 bg-urban-gold text-black px-4 py-2 rounded-full font-bold uppercase tracking-widest hover:scale-105 transition-transform whitespace-nowrap text-sm"
-                  >
-                    Información
-                  </a>
-
-                  <a
-                    href="https://maps.app.goo.gl/5ekP6Gaj1r5kdsJX8"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-2 border border-zinc-700 text-white px-4 py-2 rounded-full font-bold uppercase tracking-widest hover:bg-zinc-800 transition-transform whitespace-nowrap text-sm"
-                  >
-                    ¿Cómo llegar?
-                  </a>
-
-                  <button
-                    onClick={shareEvent}
-                    className="inline-flex items-center justify-center gap-2 border border-zinc-700 text-white px-4 py-2 rounded-full font-bold uppercase tracking-widest hover:bg-zinc-800 transition-transform whitespace-nowrap text-sm"
-                  >
-                    {copied ? 'Copiado' : 'Compartir'}
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* NOTICIAS CARD CON CARRUSEL */}
+        <div className="grid gap-6">
+          {/* NOTICIAS */}
           <div className="bg-zinc-900/50 rounded-2xl border border-zinc-800 backdrop-blur-sm overflow-hidden relative">
             <div className="flex flex-col relative z-10">
               {/* Carrusel de imágenes */}

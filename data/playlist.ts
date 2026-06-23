@@ -537,4 +537,20 @@ export const PLAYLIST_DATA: Song[] = [
     audioUrl: 'https://res.cloudinary.com/dwahbaa1r/video/upload/v1772597818/ASIIAN_-_DANGEROUS_Prod._by_StroxxOnThaBeat_2.mp3_qem6eg.mp3',
     releaseDate: 'Nuevo'
   },
+  {
+    id: '58',
+    title: 'Historial',
+    artist: '4Five',
+    coverUrl: 'https://res.cloudinary.com/dwahbaa1r/image/upload/v1782178434/Historial_ngwg3v.jpg',
+    audioUrl: 'https://res.cloudinary.com/dwahbaa1r/video/upload/v1782178454/Historial_yse4mw.mp3',
+    releaseDate: 'Nuevo'
+  },
+  {
+    id: '59',
+    title: 'Saben quien soy',
+    artist: 'Akira',
+    coverUrl: 'https://res.cloudinary.com/dwahbaa1r/image/upload/v1782178856/Saben_Quien_Soy_xcjxgw.jpg',
+    audioUrl: 'https://res.cloudinary.com/dwahbaa1r/video/upload/v1782178846/Saben_Quien_Soy_hongc7.mp3',
+    releaseDate: 'Nuevo'
+  },
 ];
