@@ -179,6 +179,40 @@ const newsTimeline: NewsItem[] = [
         url: 'https://www.instagram.com/ka_prod_/'
       }
     ]
+  },
+  {
+    id: 'bipo-a-otro-nivel-2026',
+    title: 'BIPO A OTRO NIVEL',
+    date: '26 de junio de 2026',
+    shortText: 'Bipo, representante de Pereira, llegó a The Beat Voice con ilusión y se despide como campeón a nivel nacional, dejando una historia que nadie olvidará.',
+    fullText: [
+      'Los grandes sueños encuentran a quienes se atreven a perseguirlos, y Pereira hoy celebra. Bipo, representante de nuestra ciudad, llegó a The Beat Voice con ilusión y se despide como campeón a nivel nacional.',
+      'Con talento, disciplina y corazón, demostró que la constancia siempre tiene recompensa. Gracias, Bipo, por emocionarnos, por enseñarnos que creer en uno mismo vale la pena y por dejarle a Pereira una historia que no olvidaremos.',
+      'Un triunfo a otro nivel.'
+    ],
+    media: [
+      {
+        type: 'image',
+        url: 'https://res.cloudinary.com/dwahbaa1r/image/upload/v1782697198/%EF%B8%8F_Los_grandes_sue%C3%B1os_siempre_encuentran_a_quienes_se_atreven_a_perseguirlos._TheBeatVoice_lle_daouab.jpg',
+        alt: 'Bipo a otro nivel - imagen 1'
+      },
+      {
+        type: 'image',
+        url: 'https://res.cloudinary.com/dwahbaa1r/image/upload/v1782697196/EL_%C3%9ALTIMO_OUTFIT_EL_OUTFIT_CON_EL_QUE_GANAMOS_aotronivelco___%EF%B8%8F_Trae_nostalgia_l%C3%A1grimas_ybfply.jpg',
+        alt: 'Bipo a otro nivel - imagen 2'
+      },
+      {
+        type: 'image',
+        url: 'https://res.cloudinary.com/dwahbaa1r/image/upload/v1782697194/EL_%C3%9ALTIMO_OUTFIT_EL_OUTFIT_CON_EL_QUE_GANAMOS_aotronivelco___%EF%B8%8F_Trae_nostalgia_l%C3%A1grimas_1_vhcktf.jpg',
+        alt: 'Bipo a otro nivel - imagen 3'
+      }
+    ],
+    actions: [
+      {
+        label: 'Seguir en Instagram',
+        url: 'https://www.instagram.com/soybipooo/'
+      }
+    ]
   }
 ];
 
