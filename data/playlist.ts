@@ -705,4 +705,12 @@ export const PLAYLIST_DATA: Song[] = [
     audioUrl: 'https://res.cloudinary.com/dwahbaa1r/video/upload/v1793862890/Bon_Apettite_-_Felim_Bryan_Bueno_kaprod_Master_3_gkqzvk.wav',
     releaseDate: 'Nuevo'
   },
+  {
+    id: '66',
+    title: 'NEO',
+    artist: 'Cris JP x Miike x Satelo',
+    coverUrl: 'https://res.cloudinary.com/dwahbaa1r/image/upload/v1793902940/NEO_nycbos.jpg',
+    audioUrl: 'https://res.cloudinary.com/dwahbaa1r/video/upload/v1793902961/NEO_wufgom.mp3',
+    releaseDate: 'Nuevo'
+  },
 ];
